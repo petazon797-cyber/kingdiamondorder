@@ -6,7 +6,7 @@
 <title>King Diamond Store | MLBB Diamond Top-up</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -14,52 +14,49 @@
 
 <style>
   :root{
-    --bg-void:#090b16;
-    --bg-void-2:#0d1128;
-    --panel:rgba(22,27,51,0.62);
-    --panel-solid:#141a34;
-    --border-glass:rgba(255,255,255,0.09);
-    --input-bg:rgba(9,11,22,0.55);
-    --accent-blue:#5b7fff;
-    --accent-cyan:#4ce0e8;
-    --accent-gold:#ffc857;
-    --text-primary:#edeff7;
-    --text-muted:#8d93b0;
-    --success:#34d399;
-    --danger:#fb7185;
-    --font-display:'Rajdhani',sans-serif;
-    --font-body:'Noto Sans Myanmar','Rajdhani',sans-serif;
-    --radius:18px;
-  }
-  html[data-theme="light"]{
-    --bg-void:#f3f5fb;
-    --bg-void-2:#e8ecf7;
+    --bg-void:#FAF3E7;
+    --bg-void-2:#F2E6D2;
     --panel:rgba(255,255,255,0.72);
-    --panel-solid:#ffffff;
-    --border-glass:rgba(20,26,46,0.10);
-    --input-bg:rgba(20,26,46,0.045);
-    --text-primary:#161b2e;
-    --text-muted:#666f8a;
+    --panel-solid:#FFFFFF;
+    --border-glass:rgba(43,36,29,0.12);
+    --input-bg:rgba(43,36,29,0.045);
+    --accent-blue:#8C2F4B;
+    --accent-cyan:#B4893D;
+    --accent-gold:#A9762E;
+    --text-primary:#2B241D;
+    --text-muted:#8A7F70;
+    --success:#3F7D5C;
+    --danger:#B23A48;
+    --font-display:'Cormorant Garamond',serif;
+    --font-body:'Noto Sans Myanmar','Outfit',sans-serif;
+    --radius:16px;
   }
-  html[data-theme="light"] body{
-    background:
-      radial-gradient(circle at 15% 0%, rgba(91,127,255,0.10), transparent 45%),
-      radial-gradient(circle at 90% 15%, rgba(76,224,232,0.09), transparent 40%),
-      radial-gradient(circle at 50% 100%, rgba(255,200,87,0.08), transparent 40%),
-      linear-gradient(180deg, var(--bg-void) 0%, var(--bg-void-2) 100%);
+  html[data-theme="dark"]{
+    --bg-void:#1C1420;
+    --bg-void-2:#241A22;
+    --panel:rgba(44,32,40,0.68);
+    --panel-solid:#2C2028;
+    --border-glass:rgba(230,200,160,0.14);
+    --input-bg:rgba(15,10,15,0.5);
+    --accent-blue:#B8496B;
+    --accent-cyan:#D4AF6A;
+    --accent-gold:#E3C878;
+    --text-primary:#F3ECE0;
+    --text-muted:#B5A79A;
+    --success:#5FA57C;
+    --danger:#D1697A;
   }
-  html[data-theme="light"] .particle{opacity:0.16;}
-  html[data-theme="light"] .card{box-shadow:0 8px 26px rgba(30,40,70,0.08), inset 0 1px 0 rgba(255,255,255,0.6);}
-  html[data-theme="light"] .submit-btn{color:#04070f;}
+  html[data-theme="dark"] .card{box-shadow:0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);}
+  html[data-theme="dark"] .submit-btn{color:#2B1420;}
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;}
   body{
     font-family:var(--font-body);
     color:var(--text-primary);
     background:
-      radial-gradient(circle at 15% 0%, rgba(91,127,255,0.20), transparent 45%),
-      radial-gradient(circle at 90% 15%, rgba(76,224,232,0.14), transparent 40%),
-      radial-gradient(circle at 50% 100%, rgba(255,200,87,0.08), transparent 40%),
+      radial-gradient(circle at 15% 0%, rgba(140,47,75,0.07), transparent 45%),
+      radial-gradient(circle at 90% 15%, rgba(180,137,61,0.10), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(169,118,46,0.06), transparent 40%),
       linear-gradient(180deg, var(--bg-void) 0%, var(--bg-void-2) 100%);
     min-height:100%;
     padding:24px 16px 60px;
@@ -67,13 +64,20 @@
     overflow-x:hidden;
     transition:background .35s ease, color .35s ease;
   }
-  /* floating diamond particles */
+  html[data-theme="dark"] body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(184,73,107,0.16), transparent 45%),
+      radial-gradient(circle at 90% 15%, rgba(212,175,106,0.12), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(227,200,120,0.08), transparent 40%),
+      linear-gradient(180deg, var(--bg-void) 0%, var(--bg-void-2) 100%);
+  }
+  /* subtle ambient sparkle — soft gold facets, not neon */
   .particle{
-    position:fixed; pointer-events:none; opacity:0.35;
-    background:linear-gradient(135deg,var(--accent-cyan),var(--accent-blue));
+    position:fixed; pointer-events:none; opacity:0.18;
+    background:linear-gradient(135deg,var(--accent-cyan),var(--accent-gold));
     clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
     filter:blur(0.3px);
-    animation:float 14s ease-in-out infinite;
+    animation:float 16s ease-in-out infinite;
   }
   @keyframes float{
     0%,100%{transform:translateY(0) rotate(0deg);}
@@ -98,20 +102,20 @@
   .hero-badge svg{width:12px;height:12px;}
   .hero h1{
     font-family:var(--font-display);
-    font-weight:700;font-size:clamp(28px,7vw,38px);
-    letter-spacing:0.02em;
-    background:linear-gradient(100deg,#fff 10%, var(--accent-cyan) 40%, var(--accent-gold) 55%, #fff 75%);
+    font-weight:700;font-size:clamp(30px,7vw,42px);
+    letter-spacing:0.01em;
+    background:linear-gradient(100deg, var(--text-primary) 15%, var(--accent-gold) 45%, var(--accent-blue) 58%, var(--text-primary) 80%);
     background-size:220% 100%;
     -webkit-background-clip:text;background-clip:text;color:transparent;
     line-height:1.15;
-    animation:shimmer 6s ease-in-out infinite;
+    animation:shimmer 7s ease-in-out infinite;
   }
   @keyframes shimmer{
     0%{background-position:0% 0%;}
     50%{background-position:100% 0%;}
     100%{background-position:0% 0%;}
   }
-  .hero p{color:var(--text-muted);margin-top:8px;font-size:14.5px;}
+  .hero p{color:var(--text-muted);margin-top:8px;font-size:14.5px;font-style:italic;}
 
   /* CARD */
   .card{
@@ -122,30 +126,30 @@
     -webkit-backdrop-filter:blur(16px);
     padding:22px;
     margin-bottom:18px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow:0 8px 30px rgba(43,36,29,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
     position:relative;
     overflow:hidden;
     transition:background .35s ease, border-color .35s ease;
   }
   .card::before{
     content:"";position:absolute;top:0;left:0;right:0;height:1px;
-    background:linear-gradient(90deg, transparent, rgba(255,200,87,0.55), rgba(76,224,232,0.55), transparent);
+    background:linear-gradient(90deg, transparent, rgba(169,118,46,0.55), rgba(140,47,75,0.45), transparent);
   }
   .section-label{
     font-family:var(--font-display);
-    font-size:13px;font-weight:700;letter-spacing:0.08em;
+    font-size:15px;font-weight:700;letter-spacing:0.06em;
     color:var(--accent-gold);text-transform:uppercase;
     display:flex;align-items:center;gap:8px;margin-bottom:14px;
   }
   .section-label .num{
     width:20px;height:20px;border-radius:50%;
-    background:rgba(255,200,87,0.15);border:1px solid rgba(255,200,87,0.4);
+    background:rgba(169,118,46,0.12);border:1px solid rgba(169,118,46,0.4);
     display:flex;align-items:center;justify-content:center;
-    font-size:11px;color:var(--accent-gold);
+    font-size:11px;color:var(--accent-gold);font-family:var(--font-body);
   }
   .section-label::after{
     content:"";flex:1;height:1px;
-    background:linear-gradient(90deg, rgba(255,200,87,0.35), transparent);
+    background:linear-gradient(90deg, rgba(169,118,46,0.3), transparent);
     margin-left:4px;
   }
 
@@ -165,13 +169,13 @@
     appearance:none;-webkit-appearance:none;
   }
   .field select{
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%238d93b0' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%238A7F70' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
     background-repeat:no-repeat;background-position:right 14px center;
     padding-right:36px;cursor:pointer;
   }
   .field input:focus, .field select:focus{
     border-color:var(--accent-cyan);
-    box-shadow:0 0 0 3px rgba(76,224,232,0.15);
+    box-shadow:0 0 0 3px rgba(180,137,61,0.15);
   }
   .field select option{background:var(--panel-solid);color:var(--text-primary);}
   .field select optgroup{background:var(--panel-solid);color:var(--accent-gold);font-weight:700;}
@@ -182,21 +186,21 @@
     border-radius:16px;
     padding:18px 20px;
     margin-top:6px;
-    background:linear-gradient(135deg, rgba(91,127,255,0.16), rgba(76,224,232,0.10));
-    border:1px solid rgba(76,224,232,0.35);
+    background:linear-gradient(135deg, rgba(140,47,75,0.09), rgba(180,137,61,0.10));
+    border:1px solid rgba(180,137,61,0.35);
     display:flex;align-items:center;justify-content:space-between;
     gap:12px;
     overflow:hidden;
     transition:box-shadow .25s, border-color .25s;
   }
   .ticket.filled{
-    border-color:rgba(255,200,87,0.55);
-    box-shadow:0 0 0 1px rgba(255,200,87,0.15), 0 8px 24px rgba(255,200,87,0.12);
+    border-color:rgba(169,118,46,0.55);
+    box-shadow:0 0 0 1px rgba(169,118,46,0.15), 0 8px 24px rgba(169,118,46,0.12);
     animation:pulseGlow 1.8s ease-out 1;
   }
   @keyframes pulseGlow{
-    0%{box-shadow:0 0 0 0 rgba(255,200,87,0.45);}
-    100%{box-shadow:0 0 0 14px rgba(255,200,87,0);}
+    0%{box-shadow:0 0 0 0 rgba(169,118,46,0.4);}
+    100%{box-shadow:0 0 0 14px rgba(169,118,46,0);}
   }
   .ticket::before{
     content:"";position:absolute;left:-14px;top:50%;transform:translateY(-50%);
@@ -216,11 +220,11 @@
   }
   .ticket-label{font-size:13px;color:var(--text-muted);}
   .ticket-pack{
-    font-family:var(--font-display);font-weight:700;font-size:16px;
+    font-family:var(--font-display);font-weight:700;font-size:18px;
     color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .ticket-price{
-    font-family:var(--font-display);font-weight:700;font-size:22px;
+    font-family:var(--font-display);font-weight:700;font-size:24px;
     color:var(--accent-gold);white-space:nowrap;
   }
   .ticket-price small{font-size:13px;color:var(--text-muted);font-weight:600;margin-left:4px;}
@@ -232,7 +236,7 @@
     cursor:pointer;transition:border-color .15s, background .15s;
     position:relative;
   }
-  .upload-box:hover{border-color:var(--accent-cyan);background:rgba(76,224,232,0.05);}
+  .upload-box:hover{border-color:var(--accent-cyan);background:rgba(180,137,61,0.05);}
   .upload-box.has-file{border-color:var(--success);border-style:solid;}
   .upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;}
   .upload-icon{font-size:26px;margin-bottom:6px;}
@@ -251,72 +255,72 @@
   .pay-chip{
     text-align:center;padding:11px 6px;border-radius:12px;
     border:1px solid var(--border-glass);background:var(--input-bg);
-    font-family:var(--font-display);font-size:13.5px;font-weight:600;letter-spacing:0.02em;
+    font-family:var(--font-display);font-size:14.5px;font-weight:600;letter-spacing:0.02em;
     cursor:pointer;color:var(--text-muted);
     transition:all .18s;position:relative;
   }
-  .pay-chip:hover{border-color:rgba(255,200,87,0.35);color:var(--text-primary);}
+  .pay-chip:hover{border-color:rgba(169,118,46,0.35);color:var(--text-primary);}
   .pay-chip.active{
     border-color:var(--accent-gold);color:var(--accent-gold);
-    background:linear-gradient(180deg, rgba(255,200,87,0.14), rgba(255,200,87,0.05));
-    box-shadow:0 0 0 1px rgba(255,200,87,0.15), 0 4px 14px rgba(255,200,87,0.12);
+    background:linear-gradient(180deg, rgba(169,118,46,0.14), rgba(169,118,46,0.05));
+    box-shadow:0 0 0 1px rgba(169,118,46,0.15), 0 4px 14px rgba(169,118,46,0.10);
   }
 
   /* Payment phone / copy widget */
   .pay-number{
     display:flex;align-items:center;justify-content:space-between;
     gap:10px;
-    background:linear-gradient(135deg, rgba(255,200,87,0.10), rgba(91,127,255,0.06));
-    border:1px solid rgba(255,200,87,0.28);
+    background:linear-gradient(135deg, rgba(169,118,46,0.10), rgba(140,47,75,0.05));
+    border:1px solid rgba(169,118,46,0.28);
     border-radius:14px;padding:13px 16px;margin-bottom:18px;
   }
   .pay-number-left{display:flex;align-items:center;gap:11px;min-width:0;}
   .pay-number-icon{
     width:36px;height:36px;border-radius:10px;flex-shrink:0;
-    background:rgba(255,200,87,0.14);border:1px solid rgba(255,200,87,0.3);
+    background:rgba(169,118,46,0.14);border:1px solid rgba(169,118,46,0.3);
     display:flex;align-items:center;justify-content:center;font-size:16px;
   }
   .pay-number-label{font-size:11.5px;color:var(--text-muted);letter-spacing:0.03em;}
   .pay-number-value{
-    font-family:var(--font-display);font-weight:700;font-size:18px;
+    font-family:var(--font-display);font-weight:700;font-size:19px;
     letter-spacing:0.03em;color:var(--text-primary);
   }
   .copy-btn{
     flex-shrink:0;
     display:flex;align-items:center;gap:6px;
-    background:rgba(255,200,87,0.14);border:1px solid rgba(255,200,87,0.4);
+    background:rgba(169,118,46,0.14);border:1px solid rgba(169,118,46,0.4);
     color:var(--accent-gold);
     padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;
     font-family:var(--font-body);cursor:pointer;
     transition:transform .12s, background .15s;
   }
   .copy-btn:active{transform:scale(0.94);}
-  .copy-btn.copied{background:rgba(52,211,153,0.16);border-color:rgba(52,211,153,0.5);color:var(--success);}
+  .copy-btn.copied{background:rgba(63,125,93,0.16);border-color:rgba(63,125,93,0.5);color:var(--success);}
 
   .submit-btn{
     width:100%;padding:16px;border:none;border-radius:14px;
     background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan));
-    color:#04070f;font-family:var(--font-display);font-weight:700;font-size:17px;
+    color:#FDF6EC;font-family:var(--font-display);font-weight:700;font-size:18px;
     letter-spacing:0.03em;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:8px;
     transition:transform .12s, opacity .12s, box-shadow .2s;
     margin-top:6px;
     position:relative;overflow:hidden;
-    box-shadow:0 6px 20px rgba(76,224,232,0.18);
+    box-shadow:0 6px 20px rgba(140,47,75,0.20);
   }
   .submit-btn::after{
     content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
     transform:skewX(-20deg);
     transition:left .6s ease;
   }
   .submit-btn:hover::after{left:130%;}
-  .submit-btn:hover{box-shadow:0 8px 26px rgba(76,224,232,0.3);}
+  .submit-btn:hover{box-shadow:0 8px 26px rgba(140,47,75,0.3);}
   .submit-btn:active{transform:scale(0.985);}
   .submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
   .spinner{
-    width:16px;height:16px;border:2.5px solid rgba(4,7,15,0.35);
-    border-top-color:#04070f;border-radius:50%;animation:spin .7s linear infinite;
+    width:16px;height:16px;border:2.5px solid rgba(253,246,236,0.35);
+    border-top-color:#FDF6EC;border-radius:50%;animation:spin .7s linear infinite;
     display:none;
   }
   .submit-btn.loading .spinner{display:inline-block;}
@@ -348,7 +352,7 @@
   .tg-contact a:hover{text-decoration:underline;}
   .price-notice{
     display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-    background:rgba(255,200,87,.10);border:1px solid rgba(255,200,87,.35);
+    background:rgba(169,118,46,.09);border:1px solid rgba(169,118,46,.30);
     border-radius:14px;padding:12px 16px;margin-bottom:18px;
     color:var(--text-primary);font-size:13.5px;line-height:1.5;
   }
@@ -359,16 +363,21 @@
     display:flex;align-items:center;gap:6px;
     padding:8px 14px;border-radius:999px;border:none;cursor:pointer;
     background:linear-gradient(135deg,var(--accent-cyan),var(--accent-blue));
-    color:#06111f;font-weight:700;font-size:13px;white-space:nowrap;
+    color:#FDF6EC;font-weight:700;font-size:13px;white-space:nowrap;
   }
-  #refreshPriceBtn svg{stroke:#06111f;}
+  #refreshPriceBtn svg{stroke:#FDF6EC;}
   #refreshPriceBtn:active{transform:scale(0.96);}
 
   /* ---------- Pack selection cards ---------- */
   .pack-group-label{
-    font-size:12.5px;font-weight:700;color:var(--accent-cyan);
+    font-size:13px;font-weight:700;color:var(--accent-cyan);
     text-transform:uppercase;letter-spacing:.5px;
-    margin:14px 0 8px;
+    margin:14px 0 8px;font-family:var(--font-display);
+    display:flex;align-items:center;gap:8px;
+  }
+  .pack-group-label .pgl-bar{
+    width:3px;height:14px;border-radius:2px;
+    background:linear-gradient(180deg,var(--accent-gold),var(--accent-blue));
   }
   .pack-group-label:first-child{margin-top:0;}
   .server-grid{
@@ -384,11 +393,11 @@
     display:flex;align-items:center;justify-content:center;
     height:38px;margin-bottom:8px;
   }
-  .server-name{font-size:15px;font-weight:700;color:var(--text-primary);}
+  .server-name{font-size:15.5px;font-weight:700;color:var(--text-primary);font-family:var(--font-display);}
   .server-sub{font-size:11.5px;color:var(--text-muted);margin-top:3px;}
   .server-card.selected{
     border-color:var(--accent-cyan);
-    background:linear-gradient(135deg, rgba(76,224,232,.14), rgba(91,127,255,.10));
+    background:linear-gradient(135deg, rgba(180,137,61,.14), rgba(140,47,75,.08));
   }
   .pack-empty-msg{color:var(--text-muted);font-size:13px;padding:10px 0;}
   .pack-grid{
@@ -397,15 +406,16 @@
   }
   .pack-card{
     background:var(--input-bg);border:1.5px solid var(--border-glass);
-    border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;
+    border-radius:12px;padding:14px 10px;cursor:pointer;text-align:center;
     transition:border-color .15s, transform .1s, background .15s;
   }
   .pack-card:active{transform:scale(0.96);}
+  .pack-card .pc-icon{margin:0 auto 6px;width:30px;height:30px;object-fit:contain;display:block;}
   .pack-card .pc-label{font-size:13.5px;font-weight:600;color:var(--text-primary);}
   .pack-card .pc-price{font-size:12.5px;color:var(--text-muted);margin-top:4px;}
   .pack-card.selected{
     border-color:var(--accent-cyan);
-    background:linear-gradient(135deg, rgba(76,224,232,.14), rgba(91,127,255,.10));
+    background:linear-gradient(135deg, rgba(180,137,61,.14), rgba(140,47,75,.08));
   }
   .pack-card.selected .pc-price{color:var(--accent-cyan);font-weight:700;}
 
@@ -427,24 +437,24 @@
     background:var(--panel-solid);border:1px solid var(--border-glass);
     padding:14px 20px;border-radius:14px;font-size:14px;max-width:90vw;
     display:flex;align-items:center;gap:10px;z-index:50;
-    transition:transform .3s ease;box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    transition:transform .3s ease;box-shadow:0 10px 30px rgba(43,36,29,0.18);
   }
   .toast.show{transform:translateX(-50%) translateY(0);}
-  .toast.success{border-color:rgba(52,211,153,0.5);}
-  .toast.error{border-color:rgba(251,113,133,0.5);}
+  .toast.success{border-color:rgba(63,125,93,0.5);}
+  .toast.error{border-color:rgba(178,58,72,0.5);}
 
   .success-panel{display:none;text-align:center;padding:10px 4px;}
   .success-panel .check{
     width:58px;height:58px;border-radius:50%;
-    background:rgba(52,211,153,0.15);border:1.5px solid var(--success);
+    background:rgba(63,125,93,0.15);border:1.5px solid var(--success);
     display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
     font-size:26px;color:var(--success);
   }
-  .success-panel h3{font-family:var(--font-display);font-size:20px;margin-bottom:6px;}
+  .success-panel h3{font-family:var(--font-display);font-size:22px;margin-bottom:6px;}
   .success-panel .order-id{
-    display:inline-block;background:rgba(255,200,87,0.12);color:var(--accent-gold);
+    display:inline-block;background:rgba(169,118,46,0.12);color:var(--accent-gold);
     padding:6px 14px;border-radius:999px;font-family:var(--font-display);font-weight:700;
-    letter-spacing:0.04em;margin:8px 0 14px;
+    letter-spacing:0.04em;
   }
   .success-panel p{color:var(--text-muted);font-size:13.5px;line-height:1.7;margin-bottom:16px;}
   .new-order-btn{
@@ -503,7 +513,7 @@
     display:flex;align-items:center;gap:6px;
     background:var(--panel);border:1px solid var(--border-glass);
     border-radius:999px;padding:5px;backdrop-filter:blur(12px);
-    box-shadow:0 4px 16px rgba(0,0,0,0.2);
+    box-shadow:0 4px 16px rgba(43,36,29,0.12);
   }
   .theme-toggle button{
     width:32px;height:32px;border:none;border-radius:50%;
@@ -514,9 +524,101 @@
   .theme-toggle button svg{width:16px;height:16px;}
   .theme-toggle button.active{
     background:linear-gradient(135deg,var(--accent-blue),var(--accent-cyan));
-    color:#04070f;
+    color:#FDF6EC;
   }
   .icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+
+  /* Username lookup */
+  .username-check{
+    display:none;align-items:center;gap:6px;font-size:12.5px;
+    margin:-8px 0 14px;padding:0 2px;
+  }
+  .username-check.shown{display:flex;}
+  .username-check.found{color:var(--success);}
+  .username-check.notfound{color:var(--text-muted);}
+  .username-check .uc-spin{
+    width:11px;height:11px;border:2px solid var(--border-glass);
+    border-top-color:var(--accent-cyan);border-radius:50%;
+    animation:spin .6s linear infinite;
+  }
+
+  /* Confirm Purchase Modal */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(43,36,29,0.45);backdrop-filter:blur(4px);
+    align-items:flex-end;justify-content:center;
+    padding:0;
+  }
+  .modal-overlay.shown{display:flex;}
+  @media (min-width:600px){
+    .modal-overlay{align-items:center;padding:20px;}
+  }
+  .modal-box{
+    background:var(--panel-solid);width:100%;max-width:480px;
+    border-radius:22px 22px 0 0;padding:24px 22px 26px;
+    max-height:90vh;overflow-y:auto;
+    box-shadow:0 -10px 40px rgba(43,36,29,0.25);
+    animation:modalUp .25s ease;
+  }
+  @media (min-width:600px){
+    .modal-box{border-radius:20px;}
+  }
+  @keyframes modalUp{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .modal-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .modal-header h3{font-family:var(--font-display);font-size:22px;font-weight:700;}
+  .modal-close{
+    width:30px;height:30px;border-radius:50%;border:1px solid var(--border-glass);
+    background:var(--input-bg);color:var(--text-muted);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-recap{
+    background:var(--input-bg);border:1px solid var(--border-glass);
+    border-radius:14px;padding:14px 16px;margin-bottom:16px;
+  }
+  .mr-row{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;}
+  .mr-row + .mr-row{border-top:1px dashed var(--border-glass);}
+  .mr-k{color:var(--text-muted);}
+  .mr-v{font-weight:600;color:var(--text-primary);}
+  .mr-v.mr-gold{color:var(--accent-gold);}
+  .mr-v.mr-username{color:var(--success);}
+  .modal-qty-row{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .mq-label{font-size:14px;color:var(--text-primary);font-weight:600;}
+  .qty-stepper{
+    display:flex;align-items:center;gap:14px;
+    background:var(--input-bg);border:1px solid var(--border-glass);
+    border-radius:999px;padding:6px 8px;
+  }
+  .qty-stepper button{
+    width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--panel-solid);color:var(--text-primary);font-size:16px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .qty-stepper button:disabled{opacity:0.4;cursor:not-allowed;}
+  #qtyValue{font-family:var(--font-display);font-weight:700;font-size:16px;min-width:16px;text-align:center;}
+  .modal-total-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;margin-bottom:16px;border-radius:14px;
+    background:linear-gradient(135deg, rgba(169,118,46,.12), rgba(140,47,75,.06));
+    border:1px solid rgba(169,118,46,.3);
+    font-size:14.5px;font-weight:600;
+  }
+  .mt-price{font-family:var(--font-display);font-weight:700;font-size:21px;color:var(--accent-gold);}
+  .modal-warning{
+    display:flex;gap:10px;background:rgba(178,58,72,0.08);
+    border:1px solid rgba(178,58,72,0.3);border-radius:14px;
+    padding:14px 16px;margin-bottom:18px;
+  }
+  .modal-warning svg{stroke:var(--danger);margin-top:2px;}
+  .modal-warning b{color:var(--danger);font-size:13.5px;}
+  .modal-warning p{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin:6px 0 10px;}
+  .confirm-check{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--text-primary);cursor:pointer;}
+  .confirm-check input{margin-top:2px;accent-color:var(--accent-blue);width:15px;height:15px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -534,7 +636,12 @@
 
   <div class="hero">
     <div class="hero-badge">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l10 8-10 12L2 10 12 2z" fill="#4ce0e8"/></svg>
+      <svg viewBox="0 0 32 32">
+        <polygon points="8,4 24,4 29,12 16,28 3,12" fill="#B4893D"/>
+        <polygon points="8,4 15,4 11,12 3,12" fill="#FFFFFF" opacity="0.35"/>
+        <polygon points="3,12 11,12 16,28" fill="#000000" opacity="0.12"/>
+        <polygon points="29,12 21,12 16,28" fill="#000000" opacity="0.22"/>
+      </svg>
       MOBILE LEGENDS: BANG BANG
     </div>
     <h1>King Diamond Store</h1>
@@ -617,6 +724,12 @@
           <div class="field-error" id="zoneIdError"></div>
         </div>
       </div>
+      <div class="username-check" id="usernameCheck"></div>
+
+      <div class="field" style="margin-top:2px;">
+        <label for="customerEmail">Email <span style="color:var(--text-muted);font-weight:400;">(ရှိလျှင် — မဖြစ်မနေ မဟုတ်ပါ)</span></label>
+        <input type="email" id="customerEmail" placeholder="you@example.com">
+      </div>
     </div>
 
     <div id="restOfForm" class="reveal-section">
@@ -658,12 +771,8 @@
 
       <button type="submit" class="submit-btn" id="submitBtn">
         <span class="spinner"></span>
-        <span class="btn-text">Order တင်မည်</span>
+        <span class="btn-text">အတည်ပြုရန် ဆက်သွားမည်</span>
       </button>
-      <div class="upload-progress-wrap" id="uploadProgressWrap">
-        <div class="upload-progress-bar" id="uploadProgressBar"></div>
-      </div>
-      <div class="upload-progress-label" id="uploadProgressLabel"></div>
       <div class="hint">Order တင်ပြီးနောက် <b>၅-၁၀ မိနစ်</b> အတွင်း Diamond ဖြည့်ပေးပါမည်။<br>ပြေစာမှားယွင်းပါက Order နောက်ကျနိုင်ပါသည်။
         <div class="tg-contact">
           <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:#29a9eb;flex-shrink:0;"><path d="M21.94 4.11c.27-1.13-.86-2.06-1.9-1.62L2.4 10.13c-1.16.5-1.15 2.16.02 2.64l4.4 1.8 1.86 5.7c.24.73 1.14.96 1.7.44l2.6-2.42 4.5 3.36c.86.64 2.1.18 2.34-.87l3.12-16.67zM8.53 13.32l9.9-6.94c.3-.2.63.2.37.44l-8.15 7.55c-.3.28-.5.65-.55 1.06l-.28 2.2-1.29-4.3z"/></svg>
@@ -673,6 +782,61 @@
 
     </div>
   </form>
+
+  <!-- CONFIRM PURCHASE MODAL -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Confirm Purchase</h3>
+        <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close">
+          <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-recap">
+        <div class="mr-row"><span class="mr-k">Player ID</span><span class="mr-v" id="mrPlayerId">—</span></div>
+        <div class="mr-row"><span class="mr-k">Zone ID</span><span class="mr-v" id="mrZoneId">—</span></div>
+        <div class="mr-row" id="mrUsernameRow" style="display:none;"><span class="mr-k">Username</span><span class="mr-v mr-username" id="mrUsername">—</span></div>
+        <div class="mr-row"><span class="mr-k">Server</span><span class="mr-v" id="mrServer">—</span></div>
+        <div class="mr-row"><span class="mr-k">Package</span><span class="mr-v mr-gold" id="mrPackage">—</span></div>
+      </div>
+
+      <div class="modal-qty-row">
+        <span class="mq-label">အရေအတွက်</span>
+        <div class="qty-stepper">
+          <button type="button" id="qtyMinusBtn" aria-label="လျှော့ရန်">−</button>
+          <span id="qtyValue">1</span>
+          <button type="button" id="qtyPlusBtn" aria-label="တိုးရန်">+</button>
+        </div>
+      </div>
+
+      <div class="modal-total-row">
+        <span>စုစုပေါင်း ဈေးနှုန်း</span>
+        <span class="mt-price" id="mrTotalPrice">0 Ks</span>
+      </div>
+
+      <div class="modal-warning">
+        <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <b>သတိပြုရန်</b>
+          <p>Player ID / Zone ID မှားယွင်းစွာ ဖြည့်သွင်းခြင်းကြောင့် Diamond လွဲမှားပို့ပေးမိပါက ကျွန်ုပ်တို့ တာဝန်ယူပေးနိုင်မည် မဟုတ်ပါ။ ID အားလုံး မှန်ကန်ကြောင်း သေချာစွာ စစ်ဆေးပေးပါ။</p>
+          <label class="confirm-check">
+            <input type="checkbox" id="confirmRegionCheck">
+            <span>ကျွန်ုပ်၏ Player ID / Zone ID များ မှန်ကန်ကြောင်း အတည်ပြုပါသည်</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="button" class="submit-btn" id="finalConfirmBtn" disabled>
+        <span class="spinner"></span>
+        <span class="btn-text">Order တင်မည်</span>
+      </button>
+      <div class="upload-progress-wrap" id="modalProgressWrap">
+        <div class="upload-progress-bar" id="modalProgressBar"></div>
+      </div>
+      <div class="upload-progress-label" id="modalProgressLabel"></div>
+    </div>
+  </div>
 
   <!-- SUCCESS CARD -->
   <div class="card success-panel" id="successPanel">
@@ -695,19 +859,19 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* ---------- Theme toggle (dark default, in-memory only) ---------- */
+/* ---------- Theme toggle (Ivory Elegance default, Luxury Noir optional) ---------- */
 const htmlEl = document.documentElement;
 const darkBtn = document.getElementById('darkBtn');
 const lightBtn = document.getElementById('lightBtn');
 function setTheme(mode){
-  if (mode === 'light') { htmlEl.setAttribute('data-theme', 'light'); }
+  if (mode === 'dark') { htmlEl.setAttribute('data-theme', 'dark'); }
   else { htmlEl.removeAttribute('data-theme'); }
-  darkBtn.classList.toggle('active', mode !== 'light');
-  lightBtn.classList.toggle('active', mode === 'light');
+  darkBtn.classList.toggle('active', mode === 'dark');
+  lightBtn.classList.toggle('active', mode !== 'dark');
 }
 darkBtn.addEventListener('click', () => setTheme('dark'));
 lightBtn.addEventListener('click', () => setTheme('light'));
-setTheme('dark');
+setTheme('light');
 
 /* ---------- Firebase ---------- */
 const firebaseConfig = {
@@ -829,6 +993,7 @@ function rowsToPacks(rows) {
   const pkgI = header.indexOf('package');
   const amtI = header.indexOf('diamond amount');
   const priceI = header.indexOf('profitable');
+  const iconI = header.indexOf('icon'); // optional — Sheet column not required
   if (pkgI === -1 || amtI === -1 || priceI === -1) return [];
 
   const groupOrder = [];
@@ -845,9 +1010,10 @@ function rowsToPacks(rows) {
     if (!lastGroup || !amount || !Number.isFinite(price) || price <= 0) continue;
 
     const label = /diamond|pass|pack/i.test(amount) ? amount : `${amount} Diamond`;
+    const icon = iconI !== -1 ? (r[iconI] || '').trim() : '';
 
     if (!groupMap.has(lastGroup)) { groupMap.set(lastGroup, []); groupOrder.push(lastGroup); }
-    groupMap.get(lastGroup).push({ label, price });
+    groupMap.get(lastGroup).push({ label, price, icon });
   }
   return groupOrder.map(group => ({ group, items: groupMap.get(group) }));
 }
@@ -865,6 +1031,22 @@ async function loadPacks() {
     showToast("ဈေးနှုန်းအသစ် sync မဖြစ်သေးပါ — နောက်ဆုံးသိမ်းထားသော ဈေးနှုန်းများ ပြသနေပါသည်", "error");
   }
   buildPackDropdown();
+}
+
+/* ---------- Pack icon rendering (custom PNG from Sheet, or default gem SVG) ---------- */
+const PC_FALLBACK_SVG = '<svg class="pc-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' +
+  '<polygon points="8,4 24,4 29,12 16,28 3,12" fill="#B4893D"/>' +
+  '<polygon points="8,4 15,4 11,12 3,12" fill="#FFFFFF" opacity="0.4"/>' +
+  '<polygon points="24,4 17,4 21,12 29,12" fill="#FFFFFF" opacity="0.15"/>' +
+  '<polygon points="3,12 11,12 16,28" fill="#000000" opacity="0.10"/>' +
+  '<polygon points="29,12 21,12 16,28" fill="#000000" opacity="0.25"/>' +
+  '<path d="M15,4 11,12 M17,4 21,12 M11,12 16,28 M21,12 16,28 M3,12 29,12" stroke="#6E4A22" stroke-width="0.6" opacity="0.45" fill="none"/>' +
+  '<polygon points="10,7 11.6,8.6 10,10.2 8.4,8.6" fill="#FFFFFF" opacity="0.9"/>' +
+  '</svg>';
+window.handlePcIconError = function (imgEl) { imgEl.outerHTML = PC_FALLBACK_SVG; };
+function packIconHtml(icon) {
+  if (!icon) return PC_FALLBACK_SVG;
+  return `<img class="pc-icon" src="${escapeHtml(icon)}" alt="" loading="lazy" onerror="handlePcIconError(this)">`;
 }
 
 /* ---------- Build pack card grid ---------- */
@@ -898,7 +1080,15 @@ function buildPackDropdown() {
 
     const label = document.createElement('div');
     label.className = 'pack-group-label';
-    label.textContent = grp.group;
+    label.innerHTML = `
+      <svg viewBox="0 0 32 32" width="14" height="14">
+        <polygon points="8,4 24,4 29,12 16,28 3,12" style="fill:var(--accent-gold)"/>
+        <polygon points="8,4 15,4 11,12 3,12" fill="#FFFFFF" opacity="0.35"/>
+        <polygon points="3,12 11,12 16,28" fill="#000000" opacity="0.12"/>
+        <polygon points="29,12 21,12 16,28" fill="#000000" opacity="0.22"/>
+      </svg>
+      <span class="pgl-bar"></span>${grp.group}
+    `;
     packGrid.appendChild(label);
 
     const row = document.createElement('div');
@@ -908,6 +1098,7 @@ function buildPackDropdown() {
       card.className = 'pack-card';
       card.dataset.value = `${gi}-${ii}`;
       card.innerHTML = `
+        ${packIconHtml(item.icon)}
         <div class="pc-label">${item.label}</div>
         <div class="pc-price">${item.price.toLocaleString()} Ks</div>
       `;
@@ -1109,9 +1300,9 @@ function escapeHtml(str) {
 }
 const form = document.getElementById('orderForm');
 const submitBtn = document.getElementById('submitBtn');
-const progressWrap = document.getElementById('uploadProgressWrap');
-const progressBar = document.getElementById('uploadProgressBar');
-const progressLabel = document.getElementById('uploadProgressLabel');
+const progressWrap = document.getElementById('modalProgressWrap');
+const progressBar = document.getElementById('modalProgressBar');
+const progressLabel = document.getElementById('modalProgressLabel');
 
 const ID_PATTERN = /^[0-9]{6,12}$/;
 const ZONE_PATTERN = /^[0-9]{3,5}$/;
@@ -1148,6 +1339,62 @@ zoneIdInput.addEventListener('blur', () =>
 playerIdInput.addEventListener('input', () => { if (!playerIdInput.value) return; playerIdInput.classList.remove('invalid'); playerIdError.classList.remove('shown'); });
 zoneIdInput.addEventListener('input', () => { if (!zoneIdInput.value) return; zoneIdInput.classList.remove('invalid'); zoneIdError.classList.remove('shown'); });
 
+/* ---------- Username auto-lookup (best-effort, unofficial community API) ----------
+   This calls a community-run MLBB nickname lookup service, NOT an official
+   Moonton API. It can go down or change without notice, so failures are
+   handled silently — the order form must keep working either way. */
+const USERNAME_LOOKUP_URL = "https://api.isan.eu.org/nickname/ml";
+const usernameCheckEl = document.getElementById('usernameCheck');
+let verifiedUsername = null;
+let usernameLookupSeq = 0; // guards against out-of-order responses
+
+async function tryLookupUsername() {
+  const playerId = playerIdInput.value.trim();
+  const zoneId = zoneIdInput.value.trim();
+  verifiedUsername = null;
+
+  if (!ID_PATTERN.test(playerId) || !ZONE_PATTERN.test(zoneId)) {
+    usernameCheckEl.classList.remove('shown');
+    return;
+  }
+
+  const seq = ++usernameLookupSeq;
+  usernameCheckEl.className = 'username-check shown';
+  usernameCheckEl.innerHTML = `<span class="uc-spin"></span><span>Username စစ်ဆေးနေသည်...</span>`;
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(USERNAME_LOOKUP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: playerId, server: zoneId }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const data = await res.json();
+
+    if (seq !== usernameLookupSeq) return; // a newer lookup superseded this one
+
+    if (data && data.success && data.name) {
+      verifiedUsername = data.name;
+      usernameCheckEl.className = 'username-check shown found';
+      usernameCheckEl.innerHTML = `✓ ${escapeHtml(data.name)}`;
+    } else {
+      usernameCheckEl.className = 'username-check shown notfound';
+      usernameCheckEl.innerHTML = `Username မတွေ့ပါ — ID/Zone ကို ပြန်စစ်ပေးပါ`;
+    }
+  } catch (err) {
+    if (seq !== usernameLookupSeq) return;
+    // Silent fallback — lookup service may be unofficial/unreliable, never block the order
+    usernameCheckEl.classList.remove('shown');
+    console.warn('Username lookup unavailable:', err);
+  }
+}
+
+playerIdInput.addEventListener('blur', tryLookupUsername);
+zoneIdInput.addEventListener('blur', tryLookupUsername);
+
 /* ---------- Player ID / Zone ID help tooltip ---------- */
 const idHelpBtn = document.getElementById('idHelpBtn');
 const idHelpBox = document.getElementById('idHelpBox');
@@ -1169,8 +1416,90 @@ function resetProgress() {
   progressLabel.textContent = '';
 }
 
-// Sends the photo to our secure proxy (which holds the bot token) so we can
-// still show real upload progress, without exposing the token to the browser
+/* ---------- Confirm Purchase Modal ---------- */
+const confirmModal = document.getElementById('confirmModal');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+const qtyMinusBtn = document.getElementById('qtyMinusBtn');
+const qtyPlusBtn = document.getElementById('qtyPlusBtn');
+const qtyValueEl = document.getElementById('qtyValue');
+const mrTotalPriceEl = document.getElementById('mrTotalPrice');
+const confirmRegionCheck = document.getElementById('confirmRegionCheck');
+const finalConfirmBtn = document.getElementById('finalConfirmBtn');
+
+const MAX_QTY = 10;
+let modalQty = 1;
+let pendingOrder = null; // { playerId, zoneId, file, gi, ii, item }
+
+function updateModalTotal() {
+  const unit = pendingOrder ? pendingOrder.item.price : 0;
+  mrTotalPriceEl.textContent = (unit * modalQty).toLocaleString() + ' Ks';
+  qtyMinusBtn.disabled = modalQty <= 1;
+  qtyPlusBtn.disabled = modalQty >= MAX_QTY;
+}
+
+qtyMinusBtn.addEventListener('click', () => { if (modalQty > 1) { modalQty--; qtyValueEl.textContent = modalQty; updateModalTotal(); } });
+qtyPlusBtn.addEventListener('click', () => { if (modalQty < MAX_QTY) { modalQty++; qtyValueEl.textContent = modalQty; updateModalTotal(); } });
+
+confirmRegionCheck.addEventListener('change', () => {
+  finalConfirmBtn.disabled = !confirmRegionCheck.checked;
+});
+
+function closeModal() {
+  confirmModal.classList.remove('shown');
+}
+modalCloseBtn.addEventListener('click', closeModal);
+confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) closeModal(); });
+
+function openConfirmModal() {
+  const { playerId, zoneId, item } = pendingOrder;
+  document.getElementById('mrPlayerId').textContent = playerId;
+  document.getElementById('mrZoneId').textContent = zoneId;
+  document.getElementById('mrServer').textContent = currentServer === 'mm' ? 'Myanmar Server' : 'Global Server';
+  document.getElementById('mrPackage').textContent = item.label;
+
+  const usernameRow = document.getElementById('mrUsernameRow');
+  if (verifiedUsername) {
+    usernameRow.style.display = 'flex';
+    document.getElementById('mrUsername').textContent = verifiedUsername;
+  } else {
+    usernameRow.style.display = 'none';
+  }
+
+  modalQty = 1;
+  qtyValueEl.textContent = '1';
+  updateModalTotal();
+  confirmRegionCheck.checked = false;
+  finalConfirmBtn.disabled = true;
+
+  confirmModal.classList.add('shown');
+}
+
+/* ---------- Step 1: validate + open modal ---------- */
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const playerId = playerIdInput.value.trim();
+  const zoneId = zoneIdInput.value.trim();
+  const file = compressedFile || screenshotInput.files[0];
+
+  if (!ID_PATTERN.test(playerId)) { showToast("Player ID မှားနေပါသည် — ဂဏန်း ၆-၁၂ လုံးသာ ထည့်ပါ", "error"); return; }
+  if (!ZONE_PATTERN.test(zoneId)) { showToast("Zone ID မှားနေပါသည် — ဂဏန်း ၃-၅ လုံးသာ ထည့်ပါ", "error"); return; }
+  if (!selectedPackValue) { showToast("Diamond Pack ရွေးချယ်ပေးပါ", "error"); return; }
+  if (!file) { showToast("ငွေလွှဲပြေစာ Screenshot တင်ပေးပါ", "error"); return; }
+
+  const now = Date.now();
+  if (now - lastOrderAt < COOLDOWN_MS) {
+    const waitSec = Math.ceil((COOLDOWN_MS - (now - lastOrderAt)) / 1000);
+    showToast(`ခဏစောင့်ပေးပါ — ${waitSec} စက္ကန့်အကြာမှ ထပ်တင်နိုင်ပါမည်`, "error");
+    return;
+  }
+
+  const [gi, ii] = selectedPackValue.split('-').map(Number);
+  pendingOrder = { playerId, zoneId, file, gi, ii, item: PACKS[gi].items[ii] };
+  openConfirmModal();
+});
+
+/* ---------- Step 2: actual submission, triggered from the modal ---------- */
 function sendToTelegramWithProgress(fd) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -1190,45 +1519,31 @@ function sendToTelegramWithProgress(fd) {
   });
 }
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+finalConfirmBtn.addEventListener('click', async () => {
+  if (!pendingOrder || !confirmRegionCheck.checked) return;
 
-  const playerId = document.getElementById('playerId').value.trim();
-  const zoneId = document.getElementById('zoneId').value.trim();
-  const file = compressedFile || screenshotInput.files[0];
-
-  // Client-side validation
-  if (!ID_PATTERN.test(playerId)) { showToast("Player ID မှားနေပါသည် — ဂဏန်း ၆-၁၂ လုံးသာ ထည့်ပါ", "error"); return; }
-  if (!ZONE_PATTERN.test(zoneId)) { showToast("Zone ID မှားနေပါသည် — ဂဏန်း ၃-၅ လုံးသာ ထည့်ပါ", "error"); return; }
-  if (!selectedPackValue) { showToast("Diamond Pack ရွေးချယ်ပေးပါ", "error"); return; }
-  if (!file) { showToast("ငွေလွှဲပြေစာ Screenshot တင်ပေးပါ", "error"); return; }
-
-  // Spam / duplicate-submit guard
-  const now = Date.now();
-  if (now - lastOrderAt < COOLDOWN_MS) {
-    const waitSec = Math.ceil((COOLDOWN_MS - (now - lastOrderAt)) / 1000);
-    showToast(`ခဏစောင့်ပေးပါ — ${waitSec} စက္ကန့်အကြာမှ ထပ်တင်နိုင်ပါမည်`, "error");
-    return;
-  }
-
-  const [gi, ii] = selectedPackValue.split('-').map(Number);
-  const item = PACKS[gi].items[ii];
+  const { playerId, zoneId, file, item } = pendingOrder;
+  const qty = modalQty;
+  const totalPrice = item.price * qty;
+  const email = document.getElementById('customerEmail').value.trim();
   const orderId = "KDS" + Date.now().toString().slice(-8);
 
-  submitBtn.classList.add('loading');
-  submitBtn.disabled = true;
+  finalConfirmBtn.classList.add('loading');
+  finalConfirmBtn.disabled = true;
   setProgress(0, 'Order စာရင်းသွင်းနေသည်...');
 
   try {
-    // 1) Save order to Firestore FIRST — this is the source of truth.
-    //    If this fails, nothing else happens and the user sees a clear error.
     try {
       await db.collection("orders").add({
         orderId,
         playerId,
         zoneId,
+        username: verifiedUsername || null,
         packLabel: item.label,
         packPrice: item.price,
+        quantity: qty,
+        totalPrice,
+        email: email || null,
         paymentMethod: selectedMethod,
         status: "pending",
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1237,15 +1552,14 @@ form.addEventListener('submit', async (e) => {
       throw new Error("FIRESTORE: " + fsErr.message);
     }
 
-    // 2) Notify admin via Telegram — best effort. If this fails, the order
-    //    still exists in Firestore, so we don't block success on it.
     const caption =
       `🆕 Order အသစ် #${orderId}\n` +
-      `👤 Player ID: ${playerId}\n` +
+      `👤 Player ID: ${playerId}${verifiedUsername ? ' (' + verifiedUsername + ')' : ''}\n` +
       `🌍 Zone ID: ${zoneId}\n` +
-      `💎 Pack: ${item.label}\n` +
-      `💰 ဈေးနှုန်း: ${item.price.toLocaleString()} Ks\n` +
+      `💎 Pack: ${item.label} x${qty}\n` +
+      `💰 စုစုပေါင်း: ${totalPrice.toLocaleString()} Ks\n` +
       `💳 ငွေလွှဲနည်း: ${selectedMethod}\n` +
+      (email ? `✉️ Email: ${email}\n` : '') +
       `🕒 ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Yangon' })}`;
 
     const fd = new FormData();
@@ -1259,14 +1573,14 @@ form.addEventListener('submit', async (e) => {
       console.error("Telegram notify failed (order already saved):", tgErr);
     }
 
-    // 3) Show success
     lastOrderAt = Date.now();
+    closeModal();
     document.getElementById('orderIdDisplay').textContent = "#" + orderId;
     document.getElementById('orderSummary').innerHTML = `
       <div class="os-row"><span class="os-k">Server</span><span class="os-v">${currentServer === 'mm' ? 'Myanmar Server' : 'Global Server'}</span></div>
-      <div class="os-row"><span class="os-k">Pack</span><span class="os-v">${escapeHtml(item.label)}</span></div>
-      <div class="os-row"><span class="os-k">ဈေးနှုန်း</span><span class="os-v">${item.price.toLocaleString()} Ks</span></div>
-      <div class="os-row"><span class="os-k">Player ID</span><span class="os-v">${escapeHtml(playerId)}</span></div>
+      <div class="os-row"><span class="os-k">Pack</span><span class="os-v">${escapeHtml(item.label)} x${qty}</span></div>
+      <div class="os-row"><span class="os-k">စုစုပေါင်း</span><span class="os-v">${totalPrice.toLocaleString()} Ks</span></div>
+      <div class="os-row"><span class="os-k">Player ID</span><span class="os-v">${escapeHtml(playerId)}${verifiedUsername ? ' (' + escapeHtml(verifiedUsername) + ')' : ''}</span></div>
       <div class="os-row"><span class="os-k">Zone ID</span><span class="os-v">${escapeHtml(zoneId)}</span></div>
     `;
     form.style.display = 'none';
@@ -1276,8 +1590,8 @@ form.addEventListener('submit', async (e) => {
     console.error(err);
     showToast("အမှား: " + err.message, "error");
   } finally {
-    submitBtn.classList.remove('loading');
-    submitBtn.disabled = false;
+    finalConfirmBtn.classList.remove('loading');
+    finalConfirmBtn.disabled = !confirmRegionCheck.checked;
     resetProgress();
   }
 });
@@ -1312,6 +1626,9 @@ document.getElementById('newOrderBtn').addEventListener('click', () => {
   zoneIdError.classList.remove('shown');
   idHelpBox.classList.remove('shown');
   idHelpBtn.classList.remove('active');
+  usernameCheckEl.classList.remove('shown');
+  verifiedUsername = null;
+  pendingOrder = null;
   document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('active'));
   document.querySelector('.pay-chip[data-method="KBZPay"]').classList.add('active');
   selectedMethod = "KBZPay";
