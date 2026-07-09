@@ -117,6 +117,58 @@
   }
   .hero p{color:var(--text-muted);margin-top:8px;font-size:14.5px;font-style:italic;}
 
+  /* ---------- Banner carousel (promo / event / price images) ---------- */
+  .banner-carousel{
+    position:relative;
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin-bottom:20px;
+    border:1px solid var(--border-glass);
+    background:var(--panel);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    box-shadow:0 8px 30px rgba(43,36,29,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+    display:none; /* shown via JS once at least 1 banner loads */
+  }
+  .banner-carousel::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:2;
+    background:linear-gradient(90deg, transparent, rgba(169,118,46,0.55), rgba(140,47,75,0.45), transparent);
+  }
+  .banner-track{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/7;
+    max-height:260px;
+  }
+  .banner-slide{
+    position:absolute;inset:0;
+    opacity:0;pointer-events:none;
+    transition:opacity .55s ease;
+  }
+  .banner-slide.active{opacity:1;pointer-events:auto;}
+  .banner-slide img{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .banner-slide a{display:block;width:100%;height:100%;}
+  .banner-caption{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:16px 16px 12px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+    color:#FDF6EC;font-size:13px;font-weight:600;
+    text-shadow:0 1px 3px rgba(0,0,0,0.4);
+  }
+  .banner-dots{
+    position:absolute;left:0;right:0;bottom:8px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    z-index:3;
+  }
+  .banner-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:rgba(255,255,255,0.55);
+    border:none;padding:0;cursor:pointer;
+    transition:all .2s;
+  }
+  .banner-dot.active{width:16px;border-radius:3px;background:#FDF6EC;}
+
   /* CARD */
   .card{
     background:var(--panel);
@@ -649,6 +701,12 @@
 
 <div class="wrap">
 
+  <!-- PROMO / EVENT / PRICE BANNER CAROUSEL — managed from admin-banners.html -->
+  <div class="banner-carousel" id="bannerCarousel">
+    <div class="banner-track" id="bannerTrack"></div>
+    <div class="banner-dots" id="bannerDots"></div>
+  </div>
+
   <div class="hero">
     <div class="hero-badge">
       <svg viewBox="0 0 32 32">
@@ -969,6 +1027,80 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+
+/* ---------- Promo / event / price banner carousel ---------- */
+/* Banners are managed from admin-banners.html (upload / delete).
+   This just reads the "banners" collection and displays them here. */
+(function initBannerCarousel(){
+  const wrapEl   = document.getElementById('bannerCarousel');
+  const trackEl  = document.getElementById('bannerTrack');
+  const dotsEl   = document.getElementById('bannerDots');
+  const AUTOPLAY_MS = 4500;
+  let slides = [];
+  let activeIdx = 0;
+  let timer = null;
+
+  function escapeHtmlLocal(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function render(banners){
+    if (!banners.length) { wrapEl.style.display = 'none'; return; }
+
+    trackEl.innerHTML = banners.map((b, i) => {
+      const img = `<img src="${b.image}" alt="${escapeHtmlLocal(b.title || 'banner')}" loading="${i === 0 ? 'eager' : 'lazy'}">`;
+      const caption = b.title ? `<div class="banner-caption">${escapeHtmlLocal(b.title)}</div>` : '';
+      const inner = img + caption;
+      const body = b.link
+        ? `<a href="${escapeHtmlLocal(b.link)}" target="_blank" rel="noopener noreferrer">${inner}</a>`
+        : inner;
+      return `<div class="banner-slide${i === 0 ? ' active' : ''}" data-idx="${i}">${body}</div>`;
+    }).join('');
+
+    dotsEl.style.display = banners.length > 1 ? 'flex' : 'none';
+    dotsEl.innerHTML = banners.length > 1
+      ? banners.map((_, i) => `<button type="button" class="banner-dot${i === 0 ? ' active' : ''}" data-idx="${i}" aria-label="Banner ${i + 1}"></button>`).join('')
+      : '';
+
+    slides = Array.from(trackEl.querySelectorAll('.banner-slide'));
+    wrapEl.style.display = 'block';
+    activeIdx = 0;
+    startAutoplay();
+
+    dotsEl.querySelectorAll('.banner-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        goTo(Number(dot.dataset.idx));
+        startAutoplay(); // reset timer on manual interaction
+      });
+    });
+  }
+
+  function goTo(idx){
+    if (!slides.length) return;
+    slides[activeIdx]?.classList.remove('active');
+    dotsEl.children[activeIdx]?.classList.remove('active');
+    activeIdx = (idx + slides.length) % slides.length;
+    slides[activeIdx]?.classList.add('active');
+    dotsEl.children[activeIdx]?.classList.add('active');
+  }
+
+  function startAutoplay(){
+    clearInterval(timer);
+    if (slides.length <= 1) return;
+    timer = setInterval(() => goTo(activeIdx + 1), AUTOPLAY_MS);
+  }
+
+  db.collection('banners').orderBy('createdAt', 'desc').get()
+    .then(snap => {
+      const banners = [];
+      snap.forEach(doc => banners.push(doc.data()));
+      render(banners);
+    })
+    .catch(err => {
+      console.error('Banner fetch failed:', err);
+      wrapEl.style.display = 'none';
+    });
+})();
 
 /* ---------- Telegram (via secure proxy — token no longer exposed here) ---------- */
 const TG_PROXY_URL = "https://petazon--56c32efe75f511f186e31607ee4eb77e.web.val.run";
