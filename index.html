@@ -348,7 +348,8 @@
     white-space:nowrap;flex-shrink:0;
   }
   .ss-price small{font-size:11.5px;color:var(--text-muted);font-weight:600;margin-left:3px;}
-  body{padding-bottom:84px;}
+  /* (padding-bottom for the floating nav is set once, later in the file,
+     as body's real clearance rule — see the .bottom-nav section below) */
 
   /* Diamond ticket - signature element */
   .ticket{
@@ -382,20 +383,27 @@
     width:28px;height:28px;background:var(--bg-void-2);border-radius:50%;
     border:1px solid var(--border-glass);
   }
-  .ticket-left{display:flex;align-items:center;gap:12px;min-width:0;}
+  .ticket-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;overflow:hidden;}
   .ticket-diamond{
     width:34px;height:34px;flex-shrink:0;
     background:linear-gradient(135deg,var(--accent-cyan),var(--accent-blue));
     clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
   }
+  /* Wrapper around the label + pack-name lines. This needs min-width:0
+     explicitly — without it, a long pack name (e.g. "Monthly Epic Bundle")
+     forces this box to its full text width instead of shrinking, which is
+     what let the name spill out past the ticket's right edge and get cut
+     off / overlapped by the decorative circle on Android. */
+  .ticket-info{min-width:0;flex:1 1 auto;overflow:hidden;}
   .ticket-label{font-size:13px;color:var(--text-muted);}
   .ticket-pack{
     font-family:var(--font-display);font-weight:700;font-size:18px;
     color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    display:block;max-width:100%;
   }
   .ticket-price{
     font-family:var(--font-display);font-weight:700;font-size:24px;
-    color:var(--accent-gold);white-space:nowrap;
+    color:var(--accent-gold);white-space:nowrap;flex-shrink:0;
   }
   .ticket-price small{font-size:13px;color:var(--text-muted);font-weight:600;margin-left:4px;}
 
@@ -705,13 +713,20 @@
     background:linear-gradient(135deg,var(--accent-cyan),var(--accent-gold));
     box-shadow:0 6px 16px rgba(255,45,120,0.32);
   }
+  /* On the game/server/pack wizard screen (screenPacks) the bottom nav is
+     hidden entirely — the wizard already has its own back button, and the
+     floating nav has no room to sit without crowding the short "Server"
+     step. It only shows on the main interface (game-select + other pages). */
+  html.nav-hidden .bottom-nav{display:none;}
+  html.nav-hidden body{padding-bottom:24px;}
 
-  /* sticky-summary must sit above the floating bottom nav, not underneath it.
-     The nav floats 18px off the bottom edge and is roughly 56px tall itself,
-     so clearance needs to cover both — otherwise the submit button/hint text
-     end up hidden behind it. Same safe-area amount is added to each so they
-     stay in sync on notched/home-indicator phones. */
-  body{padding-bottom:calc(140px + env(safe-area-inset-bottom, 0px));}
+  /* Reserve enough space below the last card for the floating bottom nav to
+     never sit on top of it. The 140px fallback is intentionally generous —
+     it's what applies before the JS below measures the nav's *real* height
+     (fonts, wrapping, safe areas differ by device) and tightens --bn-clearance
+     to match exactly. Same safe-area amount is added so this stays in sync
+     on notched/home-indicator phones, on both mobile and desktop widths. */
+  body{padding-bottom:calc(var(--bn-clearance, 140px) + env(safe-area-inset-bottom, 0px));}
 
   /* ---------- Support page ---------- */
   .support-intro{font-size:13px;color:var(--text-muted);margin:2px 0 16px;}
@@ -742,14 +757,14 @@
   .support-hours-title{font-size:12.5px;font-weight:700;color:var(--text-primary);font-family:var(--font-display);}
   .support-hours-value{font-size:12.5px;color:var(--text-muted);margin-top:2px;}
 
-  /* ---------- Support page: same bottom-nav clearance treatment as the
-     Reviews page below, so the last contact row / support-hours box never
-     ends up hidden behind the floating bottom-nav ---------- */
-  .support-page{padding-bottom:36px;}
+  /* ---------- Support page: small extra clearance on top of the base
+     body padding above, so the last contact row / support-hours box has
+     a touch of breathing room before the floating bottom-nav ---------- */
+  .support-page{padding-bottom:16px;}
 
-  /* ---------- Reviews & FAQ page: slightly more compact, and enough
-     bottom clearance so the fixed bottom-nav never covers the last item ---------- */
-  .reviews-page{padding-bottom:36px;}
+  /* ---------- Reviews & FAQ page: slightly more compact, plus a touch of
+     extra bottom clearance so the fixed bottom-nav never crowds the last item ---------- */
+  .reviews-page{padding-bottom:16px;}
   .reviews-page .card{padding:18px 16px;margin-bottom:14px;}
   .reviews-page .faq-title{font-size:13px;margin-bottom:12px;}
   .reviews-page .review-summary{padding:12px;margin-bottom:12px;}
@@ -1156,7 +1171,7 @@
       <div class="selected-game-header" id="selectedGameHeader"></div>
 
     <div id="serverSection" class="reveal-section">
-      <div class="section-label" style="margin-top:20px;"><span class="num">2</span> Server ရွေးရန်</div>
+      <div class="section-label" style="margin-top:2px;"><span class="num">2</span> Server ရွေးရန်</div>
       <div class="server-grid" id="serverGrid">
         <div class="server-card" data-server="global">
           <div class="server-icon">
@@ -1195,7 +1210,7 @@
       <div class="ticket" id="ticket">
         <div class="ticket-left">
           <div class="ticket-diamond"></div>
-          <div>
+          <div class="ticket-info">
             <div class="ticket-label">ရွေးချယ်ထားသော Pack</div>
             <div class="ticket-pack" id="ticketPack">မရွေးရသေးပါ</div>
           </div>
@@ -2363,6 +2378,7 @@ function selectGame(game, cardEl) {
   `;
   screenGames.classList.remove('active');
   screenPacks.classList.add('active');
+  htmlEl.classList.add('nav-hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (game === 'mlbb') {
@@ -2432,6 +2448,25 @@ const appPages = {
 };
 const bottomNav = document.getElementById('bottomNav');
 
+/* Keep the fixed bottom-nav from ever overlapping the last card on a page.
+   Instead of guessing the nav's height in px (fonts/wrapping can make it
+   taller than expected, which is what let it cover the Server-select cards),
+   measure the nav's real rendered height and feed it into a CSS var that
+   body's padding-bottom uses, with a comfortable safety margin on top. */
+function updateNavClearance() {
+  const h = bottomNav.offsetHeight || 56;
+  document.documentElement.style.setProperty('--bn-clearance', (h + 18 + 40) + 'px');
+}
+updateNavClearance();
+window.addEventListener('resize', updateNavClearance);
+window.addEventListener('orientationchange', updateNavClearance);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(updateNavClearance).catch(() => {});
+}
+if (window.ResizeObserver) {
+  new ResizeObserver(updateNavClearance).observe(bottomNav);
+}
+
 function switchPage(name) {
   Object.entries(appPages).forEach(([key, el]) => {
     el.style.display = key === name ? 'block' : 'none';
@@ -2459,6 +2494,7 @@ backToGamesBtn.addEventListener('click', () => {
   serverSection.style.display = 'none';
   screenPacks.classList.remove('active');
   screenGames.classList.add('active');
+  htmlEl.classList.remove('nav-hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
