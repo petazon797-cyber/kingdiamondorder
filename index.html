@@ -719,6 +719,10 @@
      step. It only shows on the main interface (game-select + other pages). */
   html.nav-hidden .bottom-nav{display:none;}
   html.nav-hidden body{padding-bottom:24px;}
+  /* Banners are for the Home screen only — once a game is picked
+     (screenPacks becomes active / nav-hidden is set), hide them so only
+     "King Games-Shop" + the pack wizard shows. */
+  html.nav-hidden #bannerCarousel{display:none !important;}
 
   /* Reserve enough space below the last card for the floating bottom nav to
      never sit on top of it. The 140px fallback is intentionally generous —
@@ -1072,6 +1076,160 @@
   /* Bottom nav gets an extra bouncy "pop" (same keyframes used by the
      game/server/pack selection cards) triggered from JS on tap. */
   .bn-item.pop{animation:cardPop .38s cubic-bezier(.34,1.56,.64,1);}
+
+  /* =====================================================================
+     REDESIGN — soft neumorphic "white card on light-grey" look
+     (matches the reference dashboard: flat pale-grey page, solid white
+     pill/rounded-rect boxes with a soft diffuse shadow, bold saturated
+     colour on the numbers/values, muted grey uppercase labels)
+     ===================================================================== */
+  :root{
+    --bg-void:#EEF1F6;
+    --bg-void-2:#EEF1F6;
+    --panel:#FFFFFF;
+    --panel-solid:#FFFFFF;
+    --border-glass:rgba(24,30,60,0.05);
+    --input-bg:#F2F4F9;
+    --accent-blue:#4954F5;
+    --accent-cyan:#FF3D77;
+    --accent-gold:#FF9F1C;
+    --text-primary:#181C2A;
+    --text-muted:#666C82;
+    --success:#18A957;
+    --danger:#EF4444;
+    --glass-blur:0px;
+    --shadow-soft:0 10px 26px rgba(30,40,90,0.09), 0 2px 8px rgba(30,40,90,0.05);
+    --shadow-soft-sm:0 6px 16px rgba(30,40,90,0.07), 0 1px 4px rgba(30,40,90,0.04);
+  }
+  html[data-theme="dark"]{
+    --bg-void:#12141C;
+    --bg-void-2:#12141C;
+    --panel:#1D2029;
+    --panel-solid:#1D2029;
+    --border-glass:rgba(255,255,255,0.06);
+    --input-bg:#252836;
+    --text-primary:#F2F3F8;
+    --text-muted:#8E93A8;
+    --shadow-soft:0 10px 26px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.25);
+    --shadow-soft-sm:0 6px 16px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(73,84,245,0.10), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(255,61,119,0.08), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(255,159,28,0.07), transparent 50%),
+      linear-gradient(180deg, #EEF1F6 0%, #E7EBF4 100%) !important;
+  }
+  html[data-theme="dark"] body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(73,84,245,0.16), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(255,61,119,0.12), transparent 45%),
+      linear-gradient(180deg, #12141C 0%, #14171F 100%) !important;
+  }
+  .particle{display:none !important;}
+
+  /* Hero */
+  .hero-badge{background:var(--panel-solid);box-shadow:var(--shadow-soft-sm);backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .hero h1{background:none;-webkit-text-fill-color:currentColor;color:var(--text-primary);animation:none;}
+
+  /* Stat pills (Total Users style) + banner + main card — flat white, soft shadow */
+  .trust-item, .banner-carousel, .card{
+    background:var(--panel-solid);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+    box-shadow:var(--shadow-soft);
+  }
+  .card::before, .card::after, .banner-carousel::before{display:none;}
+  .trust-item{border-radius:20px;}
+  .card{border-radius:22px;}
+  .section-label, .faq-title{color:var(--accent-blue);}
+  .section-label .num{background:rgba(73,84,245,0.10);border-color:rgba(73,84,245,0.25);color:var(--accent-blue);}
+  .section-label::after{background:linear-gradient(90deg, rgba(73,84,245,0.2), transparent);}
+
+  .faq-item{background:var(--input-bg);border:none;}
+
+  /* Diamond / Token / UC selection boxes + game & server tiles */
+  .pack-card, .server-card{
+    background:var(--panel-solid);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+    box-shadow:var(--shadow-soft-sm);border-radius:18px;
+  }
+  .pack-card .pc-label, .server-name{color:var(--text-primary);}
+  .pack-card .pc-price, .server-sub{color:var(--text-muted);}
+  .pack-card.selected, .server-card.selected{
+    background:var(--panel-solid);
+    box-shadow:0 0 0 2px var(--accent-blue), var(--shadow-soft);
+  }
+  .pack-card.selected .pc-price{color:var(--accent-blue);font-weight:700;}
+  .pack-card .pc-best-badge{background:var(--accent-gold);box-shadow:0 3px 10px rgba(255,159,28,0.35);}
+
+  /* Ticket / order summary */
+  .ticket{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft);}
+  .ticket::before, .ticket::after{background:var(--bg-void);border-color:var(--border-glass);}
+  .ticket.filled{box-shadow:0 0 0 2px var(--accent-blue), var(--shadow-soft);}
+  .ticket-price{color:var(--accent-blue);}
+
+  /* Navigation bar */
+  .bottom-nav{background:var(--panel-solid);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:var(--shadow-soft);}
+  .bn-item.active{
+    background:linear-gradient(120deg,var(--accent-blue),#8B6CFA);color:#FFFFFF;
+    box-shadow:0 8px 18px rgba(73,84,245,0.30);
+  }
+
+  /* Order တင်ရန် / Order Status စစ်ရန် tabs + category chips */
+  .main-tab, .category-tab{
+    background:var(--panel-solid);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+    box-shadow:var(--shadow-soft-sm);color:var(--text-muted);
+  }
+  .main-tab.active, .category-tab.active{
+    background:linear-gradient(120deg,var(--accent-blue),#8B6CFA);
+    border:none;color:#FFFFFF;
+    box-shadow:0 8px 20px rgba(73,84,245,0.30);
+  }
+
+  /* Payment method chips */
+  .pay-chip{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft-sm);color:var(--text-muted);}
+  .pay-chip:hover{color:var(--text-primary);}
+  .pay-chip.active{
+    background:var(--panel-solid);color:var(--accent-blue);
+    box-shadow:0 0 0 2px var(--accent-blue), var(--shadow-soft-sm);
+  }
+  .pay-number{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft-sm);}
+  .pay-number-icon{background:var(--input-bg);border:none;}
+  .pay-number-value{color:var(--accent-blue);}
+  .copy-btn{background:var(--accent-blue);border:none;color:#FFFFFF;}
+  .copy-btn.copied{background:var(--success);color:#FFFFFF;}
+
+  /* Submit button */
+  .submit-btn{background:linear-gradient(100deg,var(--accent-blue),#8B6CFA,var(--accent-cyan));box-shadow:0 10px 24px rgba(73,84,245,0.30);}
+  .submit-btn:hover{box-shadow:0 10px 24px rgba(73,84,245,0.36);}
+
+  /* Upload box */
+  .upload-box{background:var(--input-bg);border:1.5px dashed rgba(73,84,245,0.25);}
+  .upload-box:hover{border-color:var(--accent-blue);background:rgba(73,84,245,0.05);}
+
+  /* Modal */
+  .modal-box{background:var(--panel-solid);border:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 -10px 40px rgba(30,40,90,0.20);}
+  .modal-recap, .order-summary, .id-help-box{background:var(--input-bg);border:none;}
+  .modal-close, .copy-id-btn{background:var(--input-bg);border:none;}
+  .modal-total-row{background:rgba(73,84,245,0.08);border:1px solid rgba(73,84,245,0.18);}
+  .mt-price, .mr-v.mr-gold{color:var(--accent-blue);}
+  .qty-stepper{background:var(--input-bg);border:none;}
+  .qty-stepper button{background:var(--panel-solid);box-shadow:var(--shadow-soft-sm);}
+
+  /* Support / contact / reviews */
+  .contact-row, .support-hours{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft-sm);}
+  .write-review-btn{background:var(--input-bg);border:1.5px dashed rgba(73,84,245,0.3);color:var(--accent-blue);}
+  .write-review-btn:hover{border-color:var(--accent-blue);}
+  .review-summary .rs-score{color:var(--accent-blue);}
+
+  /* Toast + success */
+  .toast{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft);color:var(--text-primary);}
+  .success-panel .order-id{background:rgba(73,84,245,0.10);color:var(--accent-blue);}
+  .new-order-btn{background:var(--input-bg);border:none;}
+
+  .theme-toggle{box-shadow:var(--shadow-soft-sm);}
+  .help-btn{background:var(--input-bg);border:none;}
+  .price-notice{background:var(--panel-solid);border:none;box-shadow:var(--shadow-soft-sm);}
+  #refreshPriceBtn{background:var(--accent-blue);}
 </style>
 </head>
 <body>
@@ -1101,22 +1259,7 @@
     <p>Game Top-up ကို အမြန်ဆုံး၊ စိတ်ချရဆုံး ဝန်ဆောင်မှု</p>
   </div>
 
-  <div class="trust-row">
-    <div class="trust-item">
-      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <div><b>5-10 မိနစ်</b><span>ပျမ်းမျှ ဖြည့်ပေးချိန်</span></div>
-    </div>
-    <div class="trust-item">
-      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><path d="M12 2l8 3.5v5.5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5.5L12 2z"/><polyline points="9 12 11 14 15 10"/></svg>
-      <div><b>လုံခြုံစိတ်ချရ</b><span>Verified Payment</span></div>
-    </div>
-    <div class="trust-item">
-      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      <div><b id="trustOrderCount">စိတ်ချယုံကြည်စွာ</b><span>ဝယ်ယူသူများ</span></div>
-    </div>
-  </div>
-
-  <div class="main-tabs">
+  <div class="main-tabs" id="mainTabsRow">
     <button type="button" class="main-tab active" id="orderTabBtn">💎 Order တင်ရန်</button>
     <button type="button" class="main-tab" id="trackTabBtn">📋 Order Status စစ်ရန်</button>
   </div>
@@ -1417,6 +1560,21 @@
   </div>
 
   <div id="reviewTabPanel">
+  <div class="trust-row">
+    <div class="trust-item">
+      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div><b>5-10 မိနစ်</b><span>ပျမ်းမျှ ဖြည့်ပေးချိန်</span></div>
+    </div>
+    <div class="trust-item">
+      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><path d="M12 2l8 3.5v5.5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5.5L12 2z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <div><b>လုံခြုံစိတ်ချရ</b><span>Verified Payment</span></div>
+    </div>
+    <div class="trust-item">
+      <svg class="icon" viewBox="0 0 24 24" style="width:19px;height:19px;stroke:var(--accent-gold);"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <div><b id="trustOrderCount">စိတ်ချယုံကြည်စွာ</b><span>ဝယ်ယူသူများ</span></div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="faq-title">
       <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--accent-gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1496,13 +1654,13 @@
     <div class="section-label" style="margin-top:0;"><span class="num">🎧</span> ဆက်သွယ်ရန်</div>
     <p class="support-intro">မေးမြန်းလိုသည်များ ရှိပါက အောက်ပါ Channel များမှတစ်ဆင့် ဆက်သွယ်နိုင်ပါသည်</p>
 
-    <a class="contact-row" href="mailto:kingtopup@gmail.com">
+    <a class="contact-row" href="mailto:kopethaung@gmail.com">
       <span class="contact-icon contact-icon--gmail">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
       </span>
       <span class="contact-body">
         <span class="contact-label">Gmail</span>
-        <span class="contact-value">kingtopup@gmail.com</span>
+        <span class="contact-value">kopethaung@gmail.com</span>
       </span>
       <span class="contact-arrow">›</span>
     </a>
@@ -2176,6 +2334,7 @@ const categoryTabsEl = document.getElementById('categoryTabs');
 const gameGrid = document.getElementById('gameGrid');
 const screenGames = document.getElementById('screenGames');
 const screenPacks = document.getElementById('screenPacks');
+const mainTabsRow = document.getElementById('mainTabsRow');
 const backToGamesBtn = document.getElementById('backToGamesBtn');
 const selectedGameHeader = document.getElementById('selectedGameHeader');
 const serverSection = document.getElementById('serverSection');
@@ -2379,6 +2538,7 @@ function selectGame(game, cardEl) {
   screenGames.classList.remove('active');
   screenPacks.classList.add('active');
   htmlEl.classList.add('nav-hidden');
+  mainTabsRow.style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (game === 'mlbb') {
@@ -2495,6 +2655,7 @@ backToGamesBtn.addEventListener('click', () => {
   screenPacks.classList.remove('active');
   screenGames.classList.add('active');
   htmlEl.classList.remove('nav-hidden');
+  mainTabsRow.style.display = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
