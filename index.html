@@ -2492,13 +2492,39 @@ function defaultMlbbIcon(groupName, label) {
 function defaultPackIcon(game, groupName, label) {
   if (game === 'pubg') return PC_UC_IMG_HTML;
   if (game === 'hok') return PC_HOK_IMG_HTML;
-  if (game === 'mlbb') return defaultMlbbIcon(groupName, label);
+  if (game === 'mlbb' || game === 'mlbbban') return defaultMlbbIcon(groupName, label);
   return PC_FALLBACK_SVG;
 }
 window.handlePcIconError = function (imgEl, game, groupName, label) { imgEl.outerHTML = defaultPackIcon(game, groupName, label); };
 function packIconHtml(icon, game, groupName, label) {
   if (!icon) return defaultPackIcon(game, groupName, label);
   return `<img class="pc-icon" src="${escapeHtml(icon)}" alt="" loading="lazy" onerror="handlePcIconError(this,'${game}','${escapeHtml(groupName||'').replace(/'/g,"&#39;")}','${escapeHtml(label||'').replace(/'/g,"&#39;")}')">`;
+}
+
+/* ---------- Ticket price count-up animation ---------- */
+// Animates the big ticket price number from whatever it currently shows up
+// to the newly selected pack's price, instead of just snapping to it.
+let ticketPriceRAF = null;
+let ticketPriceCurrent = 0;
+function animateTicketPrice(el, toValue, duration = 550) {
+  if (ticketPriceRAF) cancelAnimationFrame(ticketPriceRAF);
+  const fromValue = ticketPriceCurrent;
+  const start = performance.now();
+  // easeOutCubic — fast start, gentle settle, feels snappier than linear
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  function tick(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = ease(t);
+    const value = Math.round(fromValue + (toValue - fromValue) * eased);
+    el.innerHTML = `${value.toLocaleString()}<small>Ks</small>`;
+    if (t < 1) {
+      ticketPriceRAF = requestAnimationFrame(tick);
+    } else {
+      ticketPriceCurrent = toValue;
+      ticketPriceRAF = null;
+    }
+  }
+  ticketPriceRAF = requestAnimationFrame(tick);
 }
 
 /* ---------- Build pack card grid ---------- */
@@ -2758,6 +2784,8 @@ function resetDownstreamSelections() {
   selectedPackValue = null;
   ticket.classList.remove('filled');
   ticketPack.textContent = 'မရွေးရသေးပါ';
+  if (ticketPriceRAF) { cancelAnimationFrame(ticketPriceRAF); ticketPriceRAF = null; }
+  ticketPriceCurrent = 0;
   ticketPrice.innerHTML = '0<small>Ks</small>';
   stickySummary.classList.remove('shown');
   restOfForm.classList.remove('shown');
@@ -2950,6 +2978,8 @@ function selectServer(server, cardEl) {
   selectedPackValue = null;
   ticket.classList.remove('filled');
   ticketPack.textContent = 'မရွေးရသေးပါ';
+  if (ticketPriceRAF) { cancelAnimationFrame(ticketPriceRAF); ticketPriceRAF = null; }
+  ticketPriceCurrent = 0;
   ticketPrice.innerHTML = '0<small>Ks</small>';
   stickySummary.classList.remove('shown');
   restOfForm.classList.remove('shown');
@@ -2981,7 +3011,7 @@ function selectPack(gi, ii, cardEl) {
   cardEl.classList.add('pop');
 
   ticketPack.textContent = item.label;
-  ticketPrice.innerHTML = `${item.price.toLocaleString()}<small>Ks</small>`;
+  animateTicketPrice(ticketPrice, item.price);
   ticket.classList.remove('filled');
   void ticket.offsetWidth; // restart animation
   ticket.classList.add('filled');
@@ -3635,6 +3665,8 @@ document.getElementById('newOrderBtn').addEventListener('click', () => {
   selectedPackValue = null;
   ticket.classList.remove('filled');
   ticketPack.textContent = 'မရွေးရသေးပါ';
+  if (ticketPriceRAF) { cancelAnimationFrame(ticketPriceRAF); ticketPriceRAF = null; }
+  ticketPriceCurrent = 0;
   ticketPrice.innerHTML = '0<small>Ks</small>';
   stickySummary.classList.remove('shown');
   packGrid.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected', 'pop'));
