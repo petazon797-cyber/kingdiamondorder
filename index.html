@@ -1771,6 +1771,50 @@
   </div>
 </div><!-- /pageSupport -->
 
+<!-- ============ PAGE: SEVER CHECK ============ -->
+<div id="pageSeverCheck" class="app-page" style="display:none;">
+  <div class="hero" style="margin-bottom:18px;">
+    <h1 style="font-size:clamp(22px,6vw,30px);">Sever Check</h1>
+    <p>MLBB Player ID / Zone ID ဖြင့် Username နှင့် Server (Region) ကို စစ်ဆေးပါ</p>
+  </div>
+
+  <div class="card">
+    <div class="section-label" style="margin-top:0;"><span class="num">🔎</span> ID ရိုက်ထည့်ပါ</div>
+
+    <div class="row">
+      <div class="field">
+        <label for="scPlayerId">Player ID</label>
+        <input type="text" id="scPlayerId" inputmode="numeric" pattern="[0-9]{6,12}" maxlength="12" placeholder="ဥပမာ 123456789">
+        <div class="field-error" id="scPlayerIdError"></div>
+      </div>
+      <div class="field">
+        <label for="scZoneId">Zone ID</label>
+        <input type="text" id="scZoneId" inputmode="numeric" pattern="[0-9]{3,5}" maxlength="5" placeholder="ဥပမာ 2222">
+        <div class="field-error" id="scZoneIdError"></div>
+      </div>
+    </div>
+
+    <button type="button" class="submit-btn" id="scCheckBtn" style="margin-top:10px;">
+      <span class="spinner" id="scSpinner"></span>
+      <span id="scBtnText">Sever စစ်မည်</span>
+    </button>
+
+    <div class="hint" id="scMsg" style="display:none;"></div>
+
+    <div id="scResult" style="display:none;margin-top:18px;">
+      <div style="text-align:center;margin-bottom:14px;">
+        <span class="order-id" id="scResultBadge">✓ Account တွေ့ရှိပါသည်</span>
+      </div>
+      <div class="order-summary">
+        <div class="os-row"><span class="os-k">Username</span><span class="os-v" id="scName">—</span></div>
+        <div class="os-row"><span class="os-k">Player ID</span><span class="os-v" id="scOutId">—</span></div>
+        <div class="os-row"><span class="os-k">Zone / Server ID</span><span class="os-v" id="scOutServer">—</span></div>
+        <div class="os-row"><span class="os-k">Region / Country</span><span class="os-v" id="scOutCountry">—</span></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /pageSeverCheck -->
+
   <footer>© King Games-Shop — Powered by King Games-Shop Group</footer>
 </div><!-- /wrap -->
 
@@ -1783,6 +1827,10 @@
   <button type="button" class="bn-item" data-page="orders">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     <span>Reviews</span>
+  </button>
+  <button type="button" class="bn-item" data-page="severcheck">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4.3" ry="9.5"/><line x1="2.5" y1="12" x2="21.5" y2="12"/><path d="M4.5 5.8l3 2.6M19.5 5.8l-3 2.6"/><path d="m9.5 15 2 2 3.5-4"/></svg>
+    <span>Sever Check</span>
   </button>
   <button type="button" class="bn-item" data-page="support">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1v-7h3v5z"/><path d="M3 19a2 2 0 002 2h1v-7H3v5z"/></svg>
@@ -2911,6 +2959,7 @@ const appPages = {
   home: document.getElementById('pageHome'),
   orders: document.getElementById('pageOrders'),
   support: document.getElementById('pageSupport'),
+  severcheck: document.getElementById('pageSeverCheck'),
 };
 const bottomNav = document.getElementById('bottomNav');
 
@@ -3422,6 +3471,83 @@ async function tryLookupUsername() {
 
 playerIdInput.addEventListener('blur', tryLookupUsername);
 zoneIdInput.addEventListener('blur', tryLookupUsername);
+
+/* ---------- "Sever Check" standalone page ----------
+   Same unofficial community API as the username auto-lookup above, but
+   surfaced as its own page so customers can check Username + Zone/Server +
+   Region for any MLBB account, whether or not they're placing an order. */
+const scPlayerIdInput = document.getElementById('scPlayerId');
+const scZoneIdInput = document.getElementById('scZoneId');
+const scPlayerIdError = document.getElementById('scPlayerIdError');
+const scZoneIdError = document.getElementById('scZoneIdError');
+const scCheckBtn = document.getElementById('scCheckBtn');
+const scSpinner = document.getElementById('scSpinner');
+const scBtnText = document.getElementById('scBtnText');
+const scMsg = document.getElementById('scMsg');
+const scResult = document.getElementById('scResult');
+const scResultBadge = document.getElementById('scResultBadge');
+const scName = document.getElementById('scName');
+const scOutId = document.getElementById('scOutId');
+const scOutServer = document.getElementById('scOutServer');
+const scOutCountry = document.getElementById('scOutCountry');
+
+function scShowMsg(text, isError) {
+  scMsg.textContent = text;
+  scMsg.style.display = text ? 'block' : 'none';
+  scMsg.style.color = isError ? 'var(--danger)' : 'var(--text-muted)';
+}
+
+scCheckBtn.addEventListener('click', async () => {
+  const playerId = scPlayerIdInput.value.trim();
+  const zoneId = scZoneIdInput.value.trim();
+
+  const idOk = idPattern().test(playerId);
+  const zoneOk = ZONE_PATTERN.test(zoneId);
+  scPlayerIdInput.classList.toggle('invalid', !idOk);
+  scZoneIdInput.classList.toggle('invalid', !zoneOk);
+  scPlayerIdError.textContent = idOk ? '' : idErrorMessage();
+  scPlayerIdError.classList.toggle('shown', !idOk);
+  scZoneIdError.textContent = zoneOk ? '' : 'Zone ID မှားနေပါသည် — ဂဏန်း ၃-၅ လုံးသာ ရှိရပါမည်';
+  scZoneIdError.classList.toggle('shown', !zoneOk);
+  if (!idOk || !zoneOk) return;
+
+  scResult.style.display = 'none';
+  scShowMsg('', false);
+  scCheckBtn.classList.add('loading');
+  scCheckBtn.disabled = true;
+  scBtnText.textContent = 'စစ်ဆေးနေသည်...';
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(USERNAME_LOOKUP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: playerId, server: zoneId }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const data = await res.json();
+
+    if (data && data.success && data.name) {
+      scResultBadge.textContent = '✓ Account တွေ့ရှိပါသည်';
+      scName.textContent = data.name;
+      scOutId.textContent = String(data.id ?? playerId);
+      scOutServer.textContent = String(data.server ?? zoneId);
+      scOutCountry.textContent = data.country || '—';
+      scResult.style.display = 'block';
+    } else {
+      scShowMsg('Account မတွေ့ပါ — Player ID / Zone ID ကို ပြန်စစ်ပေးပါ', true);
+    }
+  } catch (err) {
+    console.warn('Sever check lookup failed:', err);
+    scShowMsg('စစ်ဆေး၍ မရပါ — ဝန်ဆောင်မှု ခဏရပ်နေနိုင်ပါသည်၊ နောက်မှ ထပ်စမ်းကြည့်ပါ', true);
+  } finally {
+    scCheckBtn.classList.remove('loading');
+    scCheckBtn.disabled = false;
+    scBtnText.textContent = 'Sever စစ်မည်';
+  }
+});
 
 /* ---------- Player ID / Zone ID help tooltip ---------- */
 const idHelpBtn = document.getElementById('idHelpBtn');
