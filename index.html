@@ -735,6 +735,18 @@
     transition:color .2s ease, background .2s ease;position:relative;white-space:nowrap;
   }
   .bn-item svg{width:19px;height:19px;flex-shrink:0;}
+  /* With 4+ tabs the horizontal icon+label pill row no longer fits narrow
+     phone widths (it was clipping the last label — see the "Support" cutoff
+     this was written to fix). Below ~420px stack icon over a smaller label
+     and tighten padding/gaps so every tab stays fully visible and tappable. */
+  @media (max-width:420px){
+    .bottom-nav{max-width:calc(100vw - 16px);gap:0;padding:5px;}
+    .bn-item{flex-direction:column;gap:2px;padding:7px 8px;font-size:9.5px;}
+    .bn-item svg{width:18px;height:18px;}
+  }
+  @media (max-width:360px){
+    .bn-item{padding:6px 6px;font-size:9px;}
+  }
   .bn-item.active{
     color:#FFFFFF;
     background:linear-gradient(135deg,var(--accent-cyan),var(--accent-gold));
